@@ -3,8 +3,8 @@ spring:
     name: DreamScapeDemo
 
   datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:dreamdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
     username: sa
     password:
 
@@ -13,21 +13,31 @@ spring:
       enabled: true
       path: /h2-console
 
-  jpa:                   # ⚠️ ← 이건 spring 안쪽에 있어야 함!
+  jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
 
+# Hailuo API 관련
 hailuo:
   base-url: https://pollo.ai/api/platform
   generation-path: /generation/minimax/video-01
   task-status-path: /task/status
-  api-key:          # ✅ 여기에 키 연결 (또는 직접 붙여넣기)
-  webhook-url: ${HAILUO_WEBHOOK_URL:} # (선택) 웹훅 URL은 비워둬도 됨
+  # api-key: ${HAILUO_API_KEY:} # 환경변수로 관리
+  webhook-url: ${HAILUO_WEBHOOK_URL:}
+
+# OpenAI API 관련
+openai:
+  # api-key: # .env에서 로드
+  model: gpt-4o
+  api-url: https://api.openai.com/v1/chat/completions
+  temperature: 0.3
+  max-tokens: 500
+  n: 1
 
 server:
   port: 8080
